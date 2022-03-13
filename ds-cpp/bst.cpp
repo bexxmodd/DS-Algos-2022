@@ -1,6 +1,7 @@
 #include <iostream>
 #include <assert.h>
 #include <stack>
+#include <queue>
 
 template <class E>
 struct Node {
@@ -59,6 +60,22 @@ public:
         return height(root);
     }
 
+    void bfsPrint() const {
+        if (!root)
+            return;
+        std::queue<Node<E>*> frontier{};
+        frontier.push(root);
+        while (!frontier.empty()) {
+            auto p = frontier.front(); frontier.pop();
+            std::cout << p->val << ", ";
+            if (p->left)
+                frontier.push(p->left);
+            if (p->right)
+                frontier.push(p->right);
+        }
+        std::cout << std::endl;
+    }
+
 protected:
     void insert(Node<E>** p, E e) {
         if (!*p)
@@ -90,6 +107,6 @@ int main() {
     std::cout << "Min: " << tree.min() << std::endl;
     std::cout << "Max: " << tree.max() << std::endl;
     std::cout << "Tree height: " << tree.height() << std::endl;
-
+    tree.bfsPrint();
     return 0;
 }
