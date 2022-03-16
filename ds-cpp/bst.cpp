@@ -31,6 +31,10 @@ public:
     BST(const E value)
         : root(new Node<E>(value)), _size(1) {}
 
+    BST(std::vector<E>& sortedVals) : _size(sortedVals.size()) {
+        root = insertHelper(0, sortedVals.size() - 1, sortedVals);
+    }
+
     int size() const {
         return _size;
     }
@@ -38,6 +42,10 @@ public:
     void insert(const E value) {
         insert(&root, value);
         _size++;
+    }
+
+    void remove(const E value) {
+
     }
 
     E min() const {
@@ -60,6 +68,10 @@ public:
         return height(root);
     }
 
+    int depth() const {
+        return depth(root, 0);
+    }
+
     void bfsPrint() const {
         if (!root)
             return;
@@ -76,6 +88,20 @@ public:
         std::cout << std::endl;
     }
 
+    bool isBst() const {
+        std::vector<E> values;
+        inorder(root, values);
+        for (unsigned long i = 1; i < values.size(); i++) {
+            if (values[i - 1] > values[i])
+                return false;
+        }
+        return true;
+    }
+
+    bool leaf(const Node<E>* p) const {
+        return !p->left && !p->right;
+    }
+
 protected:
     void insert(Node<E>** p, E e) {
         if (!*p)
@@ -90,6 +116,40 @@ protected:
         if (!p)
             return -1;
         return std::max(height(p->left), height(p->right)) + 1;
+    }
+
+    int depth(Node<E>* p) const {
+        if (!p)
+            return 0;
+        int leftDepth = depth(p->left);
+        int rightDepth = depth(p->right);
+        return std::max(leftDepth, rightDepth);
+    }
+
+    void inorder(Node<E>* p, std::vector<E> values) const {
+        if (!p) return;
+        inorder(p->left, values);
+        values.push_back(p->val);
+        inorder(p->right, values);
+    }
+
+    int numChildren(const Node<E>* p) const {
+        int count{};
+        if (p->left)
+            count++;
+        if (p->right)
+            count++;
+        return count;
+    }
+
+    Node<E>* insertHelper(int left, int right, std::vector<int>& vals) {
+        if (left > right)
+            return nullptr;
+        int mid = (left + right) / 2;
+        auto* p = new Node<E>(vals[mid]);
+        p->left = insertHelper(left, mid - 1, vals);
+        p->right = insertHelper(mid + 1, right, vals);
+        return p;
     }
 };
 
@@ -108,5 +168,11 @@ int main() {
     std::cout << "Max: " << tree.max() << std::endl;
     std::cout << "Tree height: " << tree.height() << std::endl;
     tree.bfsPrint();
+    assert(tree.isBst());
+
+    std::vector<int> arr { 1, 3, 5, 6, 12, 24, 30 };
+    BST<int> treeOfInts(arr);
+    assert(treeOfInts.size() == 7);
+    treeOfInts.bfsPrint();
     return 0;
 }
