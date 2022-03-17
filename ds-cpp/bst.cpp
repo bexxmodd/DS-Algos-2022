@@ -69,7 +69,9 @@ public:
     }
 
     int depth() const {
-        return depth(root, 0);
+        if (root)
+            return maxDepth(root, 0);
+        return 0;
     }
 
     void bfsPrint() const {
@@ -123,7 +125,16 @@ protected:
             return 0;
         int leftDepth = depth(p->left);
         int rightDepth = depth(p->right);
-        return std::max(leftDepth, rightDepth);
+        return std::max(leftDepth, rightDepth) + 1;
+    }
+
+    int maxDepth(Node<E>* p, int depth) const {
+        if (p->left)
+            return maxDepth(p->left, depth + 1);
+        else if (p->right)
+            return maxDepth(p->right, depth + 1);
+        else
+            return depth;
     }
 
     void inorder(Node<E>* p, std::vector<E> values) const {
@@ -167,6 +178,7 @@ int main() {
     std::cout << "Min: " << tree.min() << std::endl;
     std::cout << "Max: " << tree.max() << std::endl;
     std::cout << "Tree height: " << tree.height() << std::endl;
+    std::cout << "Tree depth: " << tree.depth() << std::endl;
     tree.bfsPrint();
     assert(tree.isBst());
 
