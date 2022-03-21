@@ -45,7 +45,15 @@ public:
     }
 
     void remove(const E value) {
+        auto _ = remove(root, value);
+    }
 
+    Node<E>* minNode(Node<E>* p) const {
+        if (!p)
+            return nullptr;
+        for (; p->left; p = p->left)
+            ;
+        return p;
     }
 
     E min() const {
@@ -162,6 +170,30 @@ protected:
         p->right = insertHelper(mid + 1, right, vals);
         return p;
     }
+
+    Node<E>* remove(Node<E>* p, E value) {
+        if (!p) return nullptr;
+        else if (p->val > value) p->left = remove(p->left, value);
+        else if (p->val < value) p->right = remove(p->right, value);
+        else {
+            if (leaf(p)) {
+                delete p;
+            } else if (!p->left) {
+                auto* tmp = p;
+                p = p->right;
+                delete tmp;
+            } else if (!p->right) {
+                auto* tmp = p;
+                p = p->right;
+                delete tmp;
+            } else {
+                auto* tmp = minNode(p->right);
+                p->val = tmp->val;
+                p->right = remove(p->right, value);
+            }
+        }
+        return p;
+    }
 };
 
 int main() {
@@ -185,6 +217,9 @@ int main() {
     std::vector<int> arr { 1, 3, 5, 6, 12, 24, 30 };
     BST<int> treeOfInts(arr);
     assert(treeOfInts.size() == 7);
+    treeOfInts.bfsPrint();
+
+    treeOfInts.remove(6);
     treeOfInts.bfsPrint();
     return 0;
 }
