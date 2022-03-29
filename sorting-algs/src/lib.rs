@@ -10,6 +10,11 @@ pub trait Sorting {
     fn quick_sort(&mut self);
     fn _qsort(&mut self, start: isize, end: isize);
     fn partition(&mut self, start: isize, end: isize) -> isize;
+
+    fn heap_sort(&mut self);
+    fn heapify(&mut self);
+    fn sift_up(&mut self, start: usize, end: usize);
+    fn parent(&self, i: usize) -> usize;
 }
 
 impl<T> Sorting for [T]
@@ -69,6 +74,41 @@ where
         index
     }
 
+    fn heap_sort(&mut self) {
+        self.heapify();
+        let mut end = self.len() - 1;
+        while end > 0 {
+            println!("{:?}", self);
+            self.swap(end, 0);
+            self.heapify();
+            end -= 1;
+        }
+    }
+
+    fn heapify(&mut self) {
+        let mut end = 1;
+        while end < self.len() {
+            self.sift_up(0, end);
+            end += 1;
+        }
+    }
+
+    fn sift_up(&mut self, start: usize, end: usize) {
+        let mut child = end;
+        while child > start {
+            let parent = self.parent(child);
+            if self[parent] < self[child] {
+                self.swap(parent, child);
+                child = parent;
+            } else {
+                return;
+            }
+        }
+    }
+
+    fn parent(&self, i: usize) -> usize {
+        (i - 1) / 2
+    }
 }
 
 #[cfg(test)]
@@ -124,5 +164,12 @@ mod tests {
         v.shuffle(&mut rng);
         v.quick_sort();
         assert_eq!(v, (0..10_000).collect::<Vec<usize>>());
+    }
+
+    #[test]
+    fn heap_sort_large_vec() { 
+        let mut v = vec![3, 2, 0, 4, 1, 6, 8, 7, 5, 9];
+        v.heap_sort();
+        assert_eq!(v, vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     }
 }

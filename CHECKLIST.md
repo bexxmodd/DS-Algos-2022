@@ -2,7 +2,7 @@
 
 ${\bf InsertionSort(A)}$
 $\\n \leftarrow A.length$;
-$\\\quad$ $for$ $i \leftarrow$ $0..n - 1$
+$\\\quad$ $for$ $i \leftarrow$ $0$ $to$ $n - 1$
 $\\\qquad$ $value \leftarrow A[i]$;
 $\\\qquad$ $hole \leftarrow i$;
 $\\\quad$ $while$ $hole > 0$ $and$ $A[hole - 1] > value$
@@ -15,9 +15,9 @@ $\\\quad$ $A[hole] \leftarrow value$;
 -------------------
 ${\bf BubbleSort(A)}$
 $\\n \leftarrow A.length$;
-$\\$ $for$ $i \leftarrow$ $0..n - 1$;
+$\\$ $for$ $i \leftarrow$ $0$ $to$ $n - 1$;
 $\\\quad$ $flag \leftarrow 0$;
-$\\\quad$ $for$ $j \leftarrow$ $0..n - 2 - i$;
+$\\\quad$ $for$ $j \leftarrow$ $0$ $to$ $n - 2 - i$;
 $\\\qquad$ $if A[i] > A[j + 1]$
 $\\\qquad\quad$ $swap(A[j], A[j + 1])$;
 $\\\qquad\quad$ $flag \leftarrow 1$;
@@ -71,8 +71,9 @@ $\\\quad \textit{\textbf{QuickSort}}(A, pivotIndex + 1, end)$;
 ${\bf Partition(A, start, end)}$
 $\\ pivotValue \leftarrow A[end]$;
 $\\ pivotIndex \leftarrow start$;
-$\\ for$ $i \leftarrow start \ldots end - 1$
+$\\ for$ $i \leftarrow start$ $to$ $end - 1$
 $\\\quad if$ $A[i] \le pivotValue$
 $\\\qquad \textit{\textbf{Swap}}(A[i], A[pivotIndex])$;
 $\\\qquad pivotIndex \leftarrow pivotIndex + 1$;
 $\\ \textit{\textbf{Swap}}(A[pivotIndex], A[end])$;
+$\\ return$ $pivotIndex$;
