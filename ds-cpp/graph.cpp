@@ -39,12 +39,12 @@ int count_cc(Graph& graph) {
     for (auto node : graph) {
         std::stack<int> st{};
         if (visited.find(node.first) == visited.end()) {
-            count++;
             st.push(node.first);
             while (!st.empty()) {
                 int cur = st.top(); st.pop();
                 for (int neighbor : graph[cur]) {
                     if (visited.find(neighbor) == visited.end()) {
+                        count++;
                         visited.insert(neighbor);
                         st.push(neighbor);
                     }
