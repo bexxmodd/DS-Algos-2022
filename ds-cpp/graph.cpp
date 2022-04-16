@@ -2,7 +2,10 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <map>
+#include <set>
 #include <stack>
+#include <queue>
 
 
 typedef std::unordered_map<int, std::vector<int>> Graph;
@@ -55,6 +58,47 @@ int count_cc(Graph& graph) {
     return count;
 }
 
+std::vector<std::pair<int, int>> neighbors(
+        Graph& graph,
+        std::pair<int, int>& loc
+        ) {
+    return {};
+}
+
+int shortest_path(
+        Graph& graph,
+        std::pair<int, int>& src,
+        std::pair<int, int>& dst
+    ) {
+    using Queue = std::queue<std::pair<std::pair<int, int>, int>>;
+    std::set<std::pair<int, int>> visited{};
+    Queue frontier{};
+    frontier.push({ src, 0 });
+    while (!frontier.empty()) {
+        std::pair<int, int> cell;
+        int dist;
+        std::tie(cell, dist) = frontier.front(); frontier.pop();
+        if (cell.first == dst.first && cell.second == dst.second)
+            return dist;
+
+        for (auto& neighbor : neighbors(graph, cell)) {
+            if (visited.count(neighbor) == 0) {
+                frontier.push({ neighbor, dist + 1 });
+                visited.insert(neighbor);
+            }
+        }
+    }
+    return -1;
+}
+
+struct pair_hash {
+    template <typename T1, typename T2>
+        std::size_t operator()(const std::pair<T1, T2>& p) const {
+            auto h1 = std::hash<T1>{}(p.first);
+            auto h2 = std::hash<T2>{}(p.second);
+            return h1 ^ h2;
+        }
+}
 
 int main() {
     std::unordered_set<int> visited{};
@@ -64,5 +108,11 @@ int main() {
         std::cout << "No Path" << std::endl;
 
     std::cout << count_cc(graph) << std::endl;
+
+    std::unordered_map<std::pair<int, int>, int> umap{};
+    std::unordered_set<std::pair<int, int>> uset{};
+    std::map<std::pair<int, int>, int> omap{};
+    std::set<std::pair<int, int>> oset{};
+
     return 0;
 }
