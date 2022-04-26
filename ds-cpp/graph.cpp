@@ -98,7 +98,7 @@ struct pair_hash {
             auto h2 = std::hash<T2>{}(p.second);
             return h1 ^ h2;
         }
-}
+};
 
 int main() {
     std::unordered_set<int> visited{};
