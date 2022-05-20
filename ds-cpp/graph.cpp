@@ -20,12 +20,15 @@ Graph graph {
     {5, { 8 }}
 };
 
-bool has_path(
+bool has_path
+    (
         Graph& graph, const int src, const int dst,
         std::unordered_set<int>& visited
-    ) {
+    )
+{
     if (src == dst)
         return true;
+
     for (auto neighbor : graph[src]) {
         if (visited.find(neighbor) == visited.end()) {
             visited.insert(neighbor);
@@ -39,10 +42,11 @@ bool has_path(
 int count_cc(Graph& graph) {
     int count{};
     std::unordered_set<int> visited{};
-    for (auto node : graph) {
+    for (auto& node : graph) {
         std::stack<int> st{};
         if (visited.find(node.first) == visited.end()) {
             st.push(node.first);
+
             while (!st.empty()) {
                 int cur = st.top(); st.pop();
                 for (int neighbor : graph[cur]) {
@@ -58,10 +62,12 @@ int count_cc(Graph& graph) {
     return count;
 }
 
-std::vector<std::pair<int, int>> neighbors(
+std::vector<std::pair<int, int>> neighbors
+    (
         Graph& graph,
         std::pair<int, int>& loc
-        ) {
+    )
+{
     return {};
 }
 
